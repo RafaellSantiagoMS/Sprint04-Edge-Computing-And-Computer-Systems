@@ -78,3 +78,10 @@ void setup() {
   Serial.println("Calibração concluída!");
   delay(1000);
 }
+
+// =================== LOOP PRINCIPAL ===================
+void loop() {
+  if (!MQTT.connected()) reconnectMQTT();
+  handleMPU();
+  MQTT.loop();
+}
