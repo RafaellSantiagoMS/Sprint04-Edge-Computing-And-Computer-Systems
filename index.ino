@@ -146,3 +146,18 @@ void handleMPU() {
 
   delay(5000);
 }
+
+// =================== FUNÇÃO: RECONEXÃO MQTT ===================
+void reconnectMQTT() {
+  while (!MQTT.connected()) {
+    Serial.print("* Tentando conectar ao Broker MQTT: ");
+    Serial.println(BROKER_MQTT);
+    if (MQTT.connect(ID_MQTT)) {
+      Serial.println("Conectado ao broker MQTT!");
+      MQTT.publish(TOPICO_PUBLISH_STATUS, "s|on");
+    } else {
+      Serial.println("Falha ao conectar. Nova tentativa em 2s...");
+      delay(2000);
+    }
+  }
+}
