@@ -85,3 +85,48 @@ void loop() {
   handleMPU();
   MQTT.loop();
 }
+
+// =================== FUNÇÃO: LEITURA DO SENSOR ===================
+void handleMPU() {
+  int16_t ax, ay, az;
+  mpu.getAcceleration(&ax, &ay, &az);
+
+  // Conversão e remoção do offset
+  float accX = ((ax - offsetX) / 16384.0) * 9.81;
+  float accY = ((ay - offsetY) / 16384.0) * 9.81;
+  float accZ = ((az - offsetZ) / 16384.0) * 9.81;
+
+  // --- FILTRO DE MÉDIA EXPONENCIAL ---
+  accX_f = 0.9 * accX_f + 0.1 * accX;
+  accY_f = 0.9 * accY_f + 0.1 * accY;
+  accZ_f = 0.9 * accZ_f + 0.1 * accZ;
+
+  // --- REMOVER GRAVIDADE (Z) APÓS CALIBRAÇÃO ---
+  float accZ_corrigido = accZ_f - 9.81;
+  float accResultCorrigido = sqrt(accX_f * accX_f + accY_f * accY_f + accZ_corrigido * accZ_corrigido);
+
+
+  // --- CÁLCULO DO MÓDULO DA ACELERAÇÃO ---
+  float accResult = sqrt(accX_f * accX_f + accY_f * accY_f + accZ_f * accZ_f);
+
+  // --- CÁLCULO DO Δt ---
+  unsigned long currentTime = millis();
+  float deltaT = (currentTime - lastTime) / 1000.0;
+  if (deltaT <= 0) deltaT = 0.1; // segurança mínima
+
+
+  // --- LIMIAR PARA RUÍDO ---
+  if (fabs(accResult) < 0.6) { // ruído típico de sensores parados
+    accResult = 0;
+  }
+
+  // --- INTEGRAÇÃO ---
+  vel += accResult * deltaT;
+
+  // Desaceleração gradual se parado
+  if (accResult == 0 && vel > 0) {
+    vel *= 0.95; // perda de 5% por ciclo
+    if (vel < 0.01) vel = 0;
+  }
+
+  dist += vel * deltaT;
