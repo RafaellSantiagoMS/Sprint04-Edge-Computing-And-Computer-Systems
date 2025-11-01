@@ -130,3 +130,19 @@ void handleMPU() {
   }
 
   dist += vel * deltaT;
+
+  // --- SAÍDA SERIAL ---
+  Serial.println("--------------------------------------------------");
+  Serial.print("Δt: "); Serial.print(deltaT, 3); Serial.println(" s");
+  Serial.print("Aceleração resultante: "); Serial.print(accResult, 2); Serial.println(" m/s²");
+  Serial.print("Velocidade estimada:   "); Serial.print(vel, 2); Serial.println(" m/s");
+  Serial.print("Distância percorrida:  "); Serial.print(dist, 2); Serial.println(" m");
+  Serial.println("--------------------------------------------------\n");
+
+  // --- PUBLICAÇÃO MQTT ---
+  MQTT.publish(TOPICO_PUBLISH_ACC, String(accResult).c_str());
+  MQTT.publish(TOPICO_PUBLISH_VEL, String(vel).c_str());
+  MQTT.publish(TOPICO_PUBLISH_DIST, String(dist).c_str());
+
+  delay(5000);
+}
