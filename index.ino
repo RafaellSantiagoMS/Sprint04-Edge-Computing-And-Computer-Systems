@@ -31,3 +31,50 @@ unsigned long lastTime = 0;
 // Filtro e calibração
 float accX_f = 0, accY_f = 0, accZ_f = 0;
 float offsetX = 0, offsetY = 0, offsetZ = 0;
+
+// =================== INICIALIZAÇÕES ===================
+void setup() {
+  Serial.begin(115200);
+  pinMode(LED, OUTPUT);
+  digitalWrite(LED, HIGH);
+  delay(200);
+  digitalWrite(LED, LOW);
+
+  Serial.println("------ Conexão Wi-Fi ------");
+  WiFi.begin(SSID, PASSWORD);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nConectado com sucesso!");
+  Serial.print("IP: ");
+  Serial.println(WiFi.localIP());
+
+  MQTT.setServer(BROKER_MQTT, BROKER_PORT);
+
+  Wire.begin();
+  mpu.initialize();
+  if (!mpu.testConnection()) {
+    Serial.println("Falha ao conectar ao MPU6050!");
+    while (1);
+  }
+  Serial.println("MPU6050 conectado com sucesso!");
+  delay(1500);
+
+  // ---- Calibração inicial ----
+  Serial.println("Calibrando MPU6050... Mantenha o sensor imóvel!");
+  const int samples = 200;
+  for (int i = 0; i < samples; i++) {
+    int16_t ax, ay, az;
+    mpu.getAcceleration(&ax, &ay, &az);
+    offsetX += ax;
+    offsetY += ay;
+    offsetZ += az;
+    delay(10);
+  }
+  offsetX /= samples;
+  offsetY /= samples;
+  offsetZ /= samples;
+  Serial.println("Calibração concluída!");
+  delay(1000);
+}
