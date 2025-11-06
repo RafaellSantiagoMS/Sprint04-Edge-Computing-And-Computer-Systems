@@ -1,3 +1,12 @@
+// Integrantes :
+// Enzo Augusto Lima da Silva – RM: 562249
+// Gustavo Neres dos Santos – RM: 561785
+// Pedro Marchese – RM: 563339
+// Rafaell Santiago – RM: 563486
+
+
+
+
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include <Wire.h>
