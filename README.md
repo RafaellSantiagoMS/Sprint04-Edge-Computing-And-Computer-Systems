@@ -91,9 +91,9 @@ Depois é so acessar pelo navegadoer:
 Para replicar a arquitetura:
 
 1. Criar instância **EC2** com **Ubuntu Server**.  
-2. Acessar via **SSH** com seu **par de chaves (.pem)**.  
-3. Instalar **Docker**, **Docker Compose** e **Node-RED** conforme o guia acima.  
-4. Clonar este repositório e iniciar os containers.  
+2. Acessar via **SSH** com seu **par de chaves (.pem)**.
+3. Clonar este repositório e iniciar os containers.  
+4. Instalar **Docker**, **Docker Compose** e **Node-RED** conforme o guia acima.   
 5. Acessar o **Node-RED Dashboard** via `http://<IP_PUBLICO>:1880`.  
 
 ---
@@ -110,6 +110,23 @@ Para replicar a arquitetura:
 ![Publicação de dados em tempo real do Mpu para os registros no gráfico](./src/images/Publicação%20de%20dados%20em%20tempo%20real%20do%20ESP32%20pro%20visualização%20no%20dashboard%20.png)
 
 ---
+
+## 🏁 Conclusão do Projeto
+
+A Sprint 4 consolidou a aplicação prática da arquitetura IoT proposta para o projeto **Passa a Bola**, integrando dispositivos simulados **ESP32** e sensores **MPU6050** ao **FIWARE** e **Node-RED**, hospedados em uma instância **AWS EC2**. Essa estrutura garantiu comunicação em tempo real via **MQTT**, visualização de dados no dashboard e funcionamento distribuído, demonstrando a eficiência da arquitetura de **Edge Computing** implementada.  
+
+Com isso, o sistema se mostrou funcional e replicável, permitindo o monitoramento de dados sensoriais que podem ser aplicados no contexto esportivo, auxiliando treinadores e analistas do projeto **Passa a Bola** no acompanhamento do desempenho das jogadoras, controle de carga física e apoio à tomada de decisões baseadas em dados.  
+
+---
+
+### 📷 Explicação dos Prints
+
+1. **Conexão do ESP32 com o IP da Instância AWS:** demonstra a comunicação bem-sucedida entre o dispositivo simulado e o servidor em nuvem via MQTT.  
+2. **Conexão da Instância AWS com o Node-RED:** mostra o ambiente Node-RED hospedado na EC2, validando o fluxo de dados e a integração com o broker.  
+3. **Publicação de Dados em Tempo Real no Dashboard:** exibe a atualização contínua dos valores de aceleração e giroscópio no painel, comprovando o funcionamento da prova de conceito (PoC).  
+
+---
+
 
 
 
